@@ -28,3 +28,13 @@ sequenceDiagram
     LLM->>LLM: Correlate all findings + generate fixes
     LLM-->>Output: requirements_fixed.txt + app_fixed.py
 ```
+
+
+## Prerequisites
+
+| Requirement | Details |
+|---|---|
+| **Google Account** | Required to run the notebook in Google Colab |
+| **Groq API Key** | Free key from [console.groq.com](https://console.groq.com) (used for LLM calls) |
+
+No local installs are needed — the notebook installs all dependencies (Trivy, Bandit, Groq SDK) automatically inside Colab.
