@@ -63,4 +63,35 @@ No local installs are needed — the notebook installs all dependencies (Trivy, 
 5. **Check the output**
    - `vulnerable_app/requirements_fixed.txt` — patched dependency versions
    - `vulnerable_app/app_fixed.py` — fully fixed source code
+  
+
+## Quick Start (Local)
+
+### 1. Install Trivy
+
+```bash
+# macOS
+brew install trivy
+
+# Ubuntu/Debian
+sudo apt-get install wget apt-transport-https gnupg lsb-release
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee /etc/apt/sources.list.d/trivy.list
+sudo apt-get update && sudo apt-get install trivy
+```
+
+### 2. Install Python dependencies
+
+```bash
+pip install bandit groq pandas jupyter
+```
+
+### 3. Run the notebook
+
+```bash
+jupyter notebook nullcon_security_pipeline.ipynb
+```
+
+Then follow the same steps as above — paste your Groq API key and run all cells.
+
 
