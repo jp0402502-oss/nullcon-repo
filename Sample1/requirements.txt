@@ -2,7 +2,7 @@
 # DO NOT USE IN PRODUCTION
 
 # Flask with known vulnerabilities (old version)
-Flask==2.3.2          # CVE-2023-30861 (May 2023)
+Flask==2.0.1          # CVE-2023-30861 (May 2023)
 
 # Requests with known vulnerabilities
 requests==2.25.0      # CVE-2023-32681 (Unintended leak of Proxy-Authorization header)
@@ -11,7 +11,7 @@ requests==2.25.0      # CVE-2023-32681 (Unintended leak of Proxy-Authorization h
 Jinja2==2.11.3        # CVE-2024-22195 (XSS vulnerability)
 
 # PyYAML with unsafe load
-PyYAML==5.4           # CVE-2020-14343, CVE-2020-1747
+PyYAML==5.3.1         # CVE-2020-14343, CVE-2020-1747
 
 # Werkzeug (Flask dependency) with vulnerabilities
 Werkzeug==2.0.1       # CVE-2023-25577, CVE-2023-23934
