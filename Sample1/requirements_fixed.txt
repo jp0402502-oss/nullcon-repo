@@ -1,0 +1,41 @@
+# Intentionally vulnerable dependencies for testing CVE scanning
+# DO NOT USE IN PRODUCTION
+
+# Flask with known vulnerabilities (old version)
+Flask==2.3.2          # CVE-2023-30861 (May 2023)
+
+# Requests with known vulnerabilities
+requests==2.25.0      # CVE-2023-32681 (Unintended leak of Proxy-Authorization header)
+
+# Jinja2 with vulnerabilities
+Jinja2==2.11.3        # CVE-2024-22195 (XSS vulnerability)
+
+# PyYAML with unsafe load
+PyYAML==5.4           # CVE-2020-14343, CVE-2020-1747
+
+# Werkzeug (Flask dependency) with vulnerabilities
+Werkzeug==2.0.1       # CVE-2023-25577, CVE-2023-23934
+
+# Cryptography with known issues (if we use it)
+cryptography==3.3.2   # Multiple CVEs
+
+# Click (Flask CLI dependency)
+click==7.1.2
+
+# MarkupSafe
+MarkupSafe==2.0.1
+
+# urllib3 (requests dependency)
+urllib3==1.26.5       # CVE-2023-43804, CVE-2023-45803
+
+# certifi (certificate validation)
+certifi==2021.5.30    # Outdated root certificates
+
+# charset-normalizer
+charset-normalizer==2.0.4
+
+# idna
+idna==3.2
+
+# itsdangerous (Flask dependency)
+itsdangerous==2.0.1
