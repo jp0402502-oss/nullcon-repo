@@ -22,7 +22,8 @@ No local installs are needed — the notebook installs all dependencies (Trivy, 
 
 1. **Open the notebook in Google Colab**
    - Upload `nullcon_security_pipeline.ipynb` to [Google Colab](https://colab.research.google.com/), or open it directly from GitHub using `File → Open notebook → GitHub`.
-
+     
+   ** Note: Will share nullcon_security_pipeline.ipynb file during workshop session **
 2. **Get a free Groq API key**
    - Go to [console.groq.com](https://console.groq.com) and create an account.
    - Generate an API key from the dashboard.
