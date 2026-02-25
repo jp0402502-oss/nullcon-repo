@@ -230,6 +230,7 @@ def main() -> None:
         json.dump(output_data, f, indent=2)
     print(f"\nResults written to {output_path}")
 
+    
 
 if __name__ == "__main__":
     main()

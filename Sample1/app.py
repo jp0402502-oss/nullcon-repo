@@ -9,7 +9,8 @@ import os
 import pickle
 import sqlite3
 import subprocess
-from flask import Flask, request, render_template_string, send_file
+from flask import Flask, request, render_template_string, send_file, escape, Markup
+from flask.json import JSONEncoder
 import hashlib
 import yaml
 
@@ -25,6 +26,16 @@ AWS_ACCESS_KEY = 'AKIAIOSFODNN7EXAMPLE'  # Hardcoded AWS key
 AWS_SECRET_KEY = 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
 
 app.secret_key = SECRET_KEY
+
+# VULNERABILITY: Using deprecated Flask 2.0 JSONEncoder (removed in Flask 2.3)
+class CustomJSONEncoder(JSONEncoder):
+    """Custom JSON encoder — uses old Flask 2.0 API."""
+    def default(self, obj):
+        if isinstance(obj, set):
+            return list(obj)
+        return super().default(obj)
+
+app.json_encoder = CustomJSONEncoder
 
 def init_db():
     """Initialize a vulnerable database"""
@@ -51,6 +62,14 @@ def init_db():
     cursor.execute("INSERT OR IGNORE INTO secrets VALUES (1, 1, 'Secret admin data')")
     conn.commit()
     conn.close()
+
+# VULNERABILITY: Using @before_first_request (removed in Flask 2.3)
+@app.before_first_request
+def setup_logging():
+    """Set up logging before first request — old Flask 2.0 API."""
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    app.logger.info("Application started")
 
 # VULNERABILITY 2: SQL Injection
 @app.route('/login', methods=['GET', 'POST'])
@@ -89,6 +108,13 @@ def search():
         <h1>Search Results for: {query}</h1>
         <p>You searched for: {query}</p>
     ''')
+
+# VULNERABILITY: Using flask.escape and flask.Markup (removed in Flask 2.3, moved to markupsafe)
+@app.route('/greet')
+def greet():
+    name = request.args.get('name', 'World')
+    safe_name = escape(name)
+    return Markup(f'<h1>Hello, {safe_name}!</h1>')
 
 # VULNERABILITY 4: Command Injection
 @app.route('/ping', methods=['GET', 'POST'])
@@ -175,6 +201,7 @@ def home():
             <li><a href="/download?file=app.py">Download (Path Traversal)</a></li>
             <li><a href="/hash_password?password=test">Hash Password (Weak Crypto)</a></li>
             <li><a href="/debug_info">Debug Info (Information Disclosure)</a></li>
+            <li><a href="/greet?name=test">Greet (escape/Markup)</a></li>
         </ul>
     '''
 
