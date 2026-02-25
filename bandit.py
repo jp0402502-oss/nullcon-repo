@@ -28,7 +28,7 @@ def print_findings(json_report_path):
 def run_bandit(file_path, output_dir='bandit_analysis_results'):
     """Run Bandit on a single file, save JSON report, and print findings."""
     os.makedirs(output_dir, exist_ok=True)
-    base = os.path.basename(file_path)
+    base = os.path.splitext(os.path.basename(file_path))[0]
     json_out = os.path.join(output_dir, f'{base}_bandit_report.json')
 
     result = subprocess.run(
@@ -58,18 +58,20 @@ def run_bandit(file_path, output_dir='bandit_analysis_results'):
 
 # ── Main ──
 if len(sys.argv) < 2:
-    print(f'Usage: python3 {sys.argv[0]} <folder_path>')
+    print(f'Usage: python3 {sys.argv[0]} <folder_name>')
     sys.exit(1)
 
-target_dir = sys.argv[1]
-if not os.path.isdir(target_dir):
-    print(f'Error: "{target_dir}" is not a valid directory')
+folder_name = sys.argv[1]
+if not os.path.isdir(folder_name):
+    print(f'Error: "{folder_name}" is not a valid directory')
     sys.exit(1)
 
-python_files = sorted(Path(target_dir).glob('**/*.py'))
-print(f'\nRunning Bandit on {len(python_files)} files in "{target_dir}":\n')
+app_file = Path(folder_name) / 'app.py'
+if not app_file.exists():
+    print(f'Error: "{app_file}" not found in folder "{folder_name}"')
+    sys.exit(1)
 
-for pf in python_files:
-    run_bandit(str(pf))
+print(f'\nRunning Bandit on {app_file}:\n')
+run_bandit(str(app_file))
 
-print(f'\nBandit reports saved to bandit_analysis_results/')
+print(f'\nBandit report saved to bandit_analysis_results/')
