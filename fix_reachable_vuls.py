@@ -2,9 +2,9 @@
 Fix Reachable Vulnerabilities: Use an LLM to fix only the CVEs that are
 actually reachable in the codebase. The LLM receives two inputs —
 reachable CVEs and the application source code — then:
-  1. Updates only the used packages in requirements_fixed.txt
+  1. Updates only the used packages in requirements.txt
   2. Analyzes whether those version bumps introduce breaking API changes
-  3. Produces app_fixed.py with all compatibility fixes applied
+  3. Produces app.py with all compatibility fixes applied
 """
 
 import json
@@ -25,11 +25,12 @@ FOLDER = sys.argv[1]
 # ---------------------------------------------------------------------------
 # Configuration (override via environment variables)
 # ---------------------------------------------------------------------------
+FIXED_FOLDER = FOLDER + "_reachable_fixed"
 REACHABLE_VULNS_PATH = os.environ.get("REACHABLE_VULNS_PATH", "report/reachable_vulns.json")
 REQUIREMENTS_PATH = os.environ.get("REQUIREMENTS_PATH", FOLDER + "/requirements.txt")
 APP_PATH = os.environ.get("APP_PATH", FOLDER + "/app.py")
-REQUIREMENTS_FIXED_PATH = os.environ.get("REQUIREMENTS_FIXED_PATH", FOLDER + "/requirements_fixed.txt")
-APP_FIXED_PATH = os.environ.get("APP_FIXED_PATH", FOLDER + "/app_fixed.py")
+REQUIREMENTS_FIXED_PATH = os.environ.get("REQUIREMENTS_FIXED_PATH", FIXED_FOLDER + "/requirements.txt")
+APP_FIXED_PATH = os.environ.get("APP_FIXED_PATH", FIXED_FOLDER + "/app.py")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "PASTE-YOUR-GROQ-API-KEY")
 MODEL_ID = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
 
@@ -79,7 +80,7 @@ You are given:
 STEP 1 — UPDATE REQUIREMENTS (only for packages that have reachable CVEs)
 - For each package listed in REACHABLE_CVES, update its version in requirements.txt to the FixedVersion (or a compatible safe version).
 - Leave ALL other packages in requirements.txt UNCHANGED (same version as the current file).
-- Preserve comments and line order. Output the COMPLETE requirements_fixed.txt content.
+- Preserve comments and line order. Output the COMPLETE requirements.txt content.
 
 STEP 2 — BREAKING CHANGE ANALYSIS
 - After the version updates, consider whether the NEW versions introduce breaking API changes:
@@ -100,7 +101,7 @@ STEP 3 — FIX THE CODE (breaking-change compatibility only)
 OUTPUT FORMAT — use these exact delimiters so your response can be parsed:
 
 ---REQUIREMENTS_FIXED---
-(complete contents of requirements_fixed.txt, line by line)
+(complete contents of requirements.txt, line by line)
 ---REQUIREMENTS_FIXED---
 
 ---BREAKING_CHANGE_ANALYSIS---
@@ -108,7 +109,7 @@ OUTPUT FORMAT — use these exact delimiters so your response can be parsed:
 ---BREAKING_CHANGE_ANALYSIS---
 
 ---APP_FIXED---
-(complete contents of app_fixed.py — full Python source)
+(complete contents of app.py — full Python source)
 ---APP_FIXED---
 
 REACHABLE_CVES (fix ONLY these packages in requirements):
@@ -130,7 +131,7 @@ CURRENT app.py:
 # LLM response parser
 # ---------------------------------------------------------------------------
 def parse_llm_fix_response(content: str):
-    """Extract requirements_fixed, breaking_change_analysis, and app_fixed from LLM response."""
+    """Extract requirements, breaking_change_analysis, and app from LLM response."""
 
     section_markers = [
         "---REQUIREMENTS_FIXED---",
@@ -189,7 +190,7 @@ def parse_llm_fix_response(content: str):
 # LLM caller
 # ---------------------------------------------------------------------------
 def ask_groq_generate_fixes(prompt: str, api_key: str, model: str) -> str:
-    """Call Groq to generate requirements_fixed.txt, breaking-change analysis, and app_fixed.py."""
+    """Call Groq to generate requirements.txt, breaking-change analysis, and app.py."""
     if not api_key:
         raise ValueError("GROQ_API_KEY not set. Set it via environment variable.")
 
@@ -262,6 +263,9 @@ def main() -> None:
     print("BREAKING CHANGE ANALYSIS")
     print("=" * 60)
     print(breaking_analysis if breaking_analysis else "No analysis returned.")
+
+    # --- Create output folder ---
+    os.makedirs(FIXED_FOLDER, exist_ok=True)
 
     # --- Write outputs ---
     if requirements_fixed:
