@@ -10,10 +10,10 @@ from pathlib import Path
 from groq import Groq
 
 # Paths (override via environment or change defaults)
-TRIVY_PATH = os.environ.get("TRIVY_PATH", "trivy_results.json")
-CALLGRAPH_PATH = os.environ.get("CALLGRAPH_PATH", "callgraph.json")
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-MODEL_ID = os.environ.get("GROQ_MODEL", "meta-llama/llama-4-scout-17b-16e-instruct")
+TRIVY_PATH = os.environ.get("TRIVY_PATH", "./report/trivy_results.json")
+CALLGRAPH_PATH = os.environ.get("CALLGRAPH_PATH", "./report/callgraph.json")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "PASTE-YOUR-GROQ-API-KEY")
+MODEL_ID = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 # Max chars for call graph in prompt to avoid token limits
 MAX_CALLGRAPH_CHARS = 25000
@@ -218,7 +218,7 @@ def main() -> None:
     print(f"\nTotal: {len(used_ids)} reachable out of {len(all_vulns)} vulnerabilities")
 
     # Optionally write results to JSON
-    output_path = Path(os.environ.get("OUTPUT_PATH", "reachable_vulns.json"))
+    output_path = Path(os.environ.get("OUTPUT_PATH", "./report/reachable_vulns.json"))
     output_data = {
         "used_vulnerability_ids": sorted(used_ids),
         "reason": reason,

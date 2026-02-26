@@ -30,8 +30,8 @@ REQUIREMENTS_PATH = os.environ.get("REQUIREMENTS_PATH", FOLDER + "/requirements.
 APP_PATH = os.environ.get("APP_PATH", FOLDER + "/app.py")
 REQUIREMENTS_FIXED_PATH = os.environ.get("REQUIREMENTS_FIXED_PATH", FOLDER + "/requirements_fixed.txt")
 APP_FIXED_PATH = os.environ.get("APP_FIXED_PATH", FOLDER + "/app_fixed.py")
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-MODEL_ID = os.environ.get("GROQ_MODEL", "meta-llama/llama-4-scout-17b-16e-instruct")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "PASTE-YOUR-GROQ-API-KEY")
+MODEL_ID = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 
 # ---------------------------------------------------------------------------

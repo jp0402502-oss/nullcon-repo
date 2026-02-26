@@ -5,7 +5,7 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-OUTPUT_FILE = 'callgraph.json'
+OUTPUT_FILE = './report/callgraph.json'
 
 
 class CallGraphAnalyzer(ast.NodeVisitor):

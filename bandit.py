@@ -25,7 +25,7 @@ def print_findings(json_report_path):
         print(f'  {"-" * 70}')
 
 
-def run_bandit(file_path, output_dir='bandit_analysis_results'):
+def run_bandit(file_path, output_dir='report'):
     """Run Bandit on a single file, save JSON report, and print findings."""
     os.makedirs(output_dir, exist_ok=True)
     base = os.path.splitext(os.path.basename(file_path))[0]
