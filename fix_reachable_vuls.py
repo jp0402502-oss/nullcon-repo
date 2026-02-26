@@ -25,7 +25,7 @@ FOLDER = sys.argv[1]
 # ---------------------------------------------------------------------------
 # Configuration (override via environment variables)
 # ---------------------------------------------------------------------------
-REACHABLE_VULNS_PATH = os.environ.get("REACHABLE_VULNS_PATH", "reachable_vulns.json")
+REACHABLE_VULNS_PATH = os.environ.get("REACHABLE_VULNS_PATH", "report/reachable_vulns.json")
 REQUIREMENTS_PATH = os.environ.get("REQUIREMENTS_PATH", FOLDER + "/requirements.txt")
 APP_PATH = os.environ.get("APP_PATH", FOLDER + "/app.py")
 REQUIREMENTS_FIXED_PATH = os.environ.get("REQUIREMENTS_FIXED_PATH", FOLDER + "/requirements_fixed.txt")
