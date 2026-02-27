@@ -146,3 +146,17 @@ python3 fix_exploitable_vuls.py ./sample1
 ```
 
 > **Output:** `report/app_bandit_report.json` and `sample1_exploitable_fixed/app.py`
+
+
+### 6. Verify by rescanning with Trivy against new generated output
+
+```bash
+# Print results to terminal
+trivy fs --severity HIGH,CRITICAL ./sample1_reachable_fixed
+
+# Save JSON report for the pipeline
+trivy fs --severity HIGH,CRITICAL --format json --output ./report/trivy_results.json ./sample1_reachable_fixed
+```
+
+
+### 7. Validate fix repo by running some functional and unit testing before push to prod
